@@ -24,6 +24,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Install hirak/prestissimo for parallel install
 RUN composer global require hirak/prestissimo
 
+# Add nodejs and npm
+RUN apk add --update nodejs npm
+
 # Remove Cache
 RUN rm -rf /var/cache/apk/*
 
