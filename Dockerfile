@@ -1,3 +1,6 @@
+# Add nodejs v15.11.0 and npm v7.6.0
+FROM node:15.11.0-alpine as node
+
 # Set master image
 FROM php:7.4-fpm-alpine
 
@@ -19,13 +22,18 @@ RUN apk update && apk add --no-cache \
 RUN docker-php-ext-install pdo_mysql zip exif gd
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=1.10.10
 
 # Install hirak/prestissimo for parallel install
 RUN composer global require hirak/prestissimo
 
-# Add nodejs and npm
-RUN apk add --update nodejs npm
+# Install node15
+COPY --from=node /usr/lib /usr/lib
+COPY --from=node /usr/local/share /usr/local/share
+COPY --from=node /usr/local/lib /usr/local/lib
+COPY --from=node /usr/local/include /usr/local/include
+COPY --from=node /usr/local/bin /usr/local/bin
+
 
 # Remove Cache
 RUN rm -rf /var/cache/apk/*
