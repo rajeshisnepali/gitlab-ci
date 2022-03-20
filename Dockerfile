@@ -2,25 +2,12 @@
 FROM node:15.11.0-alpine as node
 
 # Set master image
-FROM php:7.4-fpm-alpine
+FROM rajeshisnepali/gitlab-ci-initial
 
 LABEL maintainer="Rajesh Chaudhary rajeshisnepali@gmail.com"
 
 # Set working directory
 WORKDIR /var/www
-
-# Install dependencies
-RUN apk update && apk add --no-cache \
-    bash \
-    rsync \
-    openssh \
-    alpine-sdk shadow vim curl \
-    zip libzip-dev \
-    libpng-dev
-
-# Install python2.7
-RUN apk update && apk add --no-cache \
-    python2
 
 # Add and Enable PHP-PDO Extenstions
 RUN docker-php-ext-install pdo_mysql zip exif gd
@@ -30,13 +17,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Install hirak/prestissimo for parallel install
 RUN composer global require hirak/prestissimo
-
-# Install node15
-COPY --from=node /usr/lib /usr/lib
-COPY --from=node /usr/local/share /usr/local/share
-COPY --from=node /usr/local/lib /usr/local/lib
-COPY --from=node /usr/local/include /usr/local/include
-COPY --from=node /usr/local/bin /usr/local/bin
 
 # Remove Cache
 RUN rm -rf /var/cache/apk/*
