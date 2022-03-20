@@ -1,0 +1,21 @@
+# Set master image
+FROM php:7.4-fpm-alpine
+
+LABEL maintainer="Rajesh Chaudhary rajeshisnepali@gmail.com"
+
+# Set working directory
+WORKDIR /var/www
+
+# Install dependencies
+RUN apk update && apk add --no-cache \
+    bash \
+    rsync \
+    openssh \
+    alpine-sdk shadow vim curl \
+    zip libzip-dev \
+    libpng-dev
+
+# Remove Cache
+RUN rm -rf /var/cache/apk/*
+
+CMD ["php-fpm"]
