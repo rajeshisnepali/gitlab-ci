@@ -1,0 +1,3 @@
+image: neputertech/gitlab-ci:node16.14.2python2php7.4
+Dockerfile: Dockerfile-python
+
