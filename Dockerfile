@@ -1,6 +1,8 @@
 # Add nodejs v15.11.0 and npm v7.6.0
 FROM node:15.11.0-alpine as node
 
+FROM neputertech/cf as ncf
+
 # Set master image
 FROM rajeshisnepali/gitlab-ci-initial
 
@@ -20,5 +22,8 @@ RUN composer global require hirak/prestissimo
 
 # Remove Cache
 RUN rm -rf /var/cache/apk/*
+
+# Cloudflare Purge Cache script
+COPY --from=ncf /usr/local/bin/cf_purge_cache /usr/local/bin/cf_purge_cache
 
 CMD ["php-fpm"]
